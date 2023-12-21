@@ -1,7 +1,7 @@
 const express = require("express");
 const developRouter = express.Router();
 const multer = require("multer");
-// Middleware to check Authorization header
+
 const checkAuthorizationHeader = (req, res, next) => {
   const authorizationHeader = req.get("Authorization");
 
@@ -9,16 +9,13 @@ const checkAuthorizationHeader = (req, res, next) => {
     return res.status(401).send("Unauthorized");
   }
 
-  // If the header is correct, proceed to the next middleware/route handler
   next();
 };
 
 const upload = multer({ storage: multer.memoryStorage() });
 
-// Apply the checkAuthorizationHeader middleware to all routes in the "develop" router
 developRouter.use(checkAuthorizationHeader);
 
-// Define a route within the "develop" router
 developRouter.get("/", (req, res) => {
   res.send("Welcome to the develop section!");
 });
@@ -37,7 +34,6 @@ const validateJsonPayload = (req, res, next) => {
   next();
 };
 
-// Apply the validateJsonPayload middleware to the specific route
 developRouter.post("/multiply", validateJsonPayload, (req, res) => {
   const { a, b } = req.body;
   const result = Number(`${a}`) * Number(`${b}`);
@@ -46,16 +42,13 @@ developRouter.post("/multiply", validateJsonPayload, (req, res) => {
 });
 
 developRouter.post("/upload", upload.single("file"), (req, res) => {
-  // Access the uploaded file information using req.file
   if (!req.file) {
     return res.status(422).json({ error: "No file uploaded" });
   }
 
-  // Access the file data as a buffer (in-memory)
   const fileBuffer = req.file.buffer;
   const myFile = req.file;
-  // Process the file data as needed
-  // For example, you can convert the buffer to base64
+
   const fileBase64 = fileBuffer.toString("base64");
   const sizeInMB = (myFile.size / (1024 * 1024)).toFixed(2);
   const resBody = {
@@ -69,5 +62,4 @@ developRouter.post("/upload", upload.single("file"), (req, res) => {
   res.json(resBody);
 });
 
-// Export the router to use in the main application
 module.exports = developRouter;
