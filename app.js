@@ -5,7 +5,7 @@ const port = 3000;
 const cors = require("cors");
 
 const developRouter = require("./router/developRouter");
-
+const toDoRouter = require("./router/toDoRouter");
 app.use(bodyParser.json());
 app.use(
   bodyParser.urlencoded({
@@ -14,7 +14,8 @@ app.use(
 );
 app.use(cors());
 
-app.use("/develop", developRouter);
+// app.use("/develop", developRouter);
+app.use("/to-do", toDoRouter);
 
 app.get("/", (req, res) => {
   res.send("Welcome to the homepage!");
