@@ -23,21 +23,19 @@ developRouter.get("/", (req, res) => {
 const validateJsonPayload = (req, res, next) => {
   const { a, b } = req.body;
 
-  // Check if 'a' and 'b' properties are present in the JSON payload
   if (!a || !b) {
     return res.status(422).json({
       error: `Unsupported data format`,
     });
   }
 
-  // If the payload is valid, proceed to the next middleware/route handler
   next();
 };
 
 developRouter.post("/multiply", validateJsonPayload, (req, res) => {
   const { a, b } = req.body;
   const result = Number(`${a}`) * Number(`${b}`);
-  res.status(200); // 201 Created
+  res.status(200);
   res.json({ result });
 });
 
